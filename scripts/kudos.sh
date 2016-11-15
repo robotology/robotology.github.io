@@ -22,14 +22,7 @@ function query()
         tokenstr="-H \"Authorization: token $2\""
     fi
 
-    local cmd="curl -s $tokenstr https://api.github.com/search/issues?q=org%3Arobotology+$1 | jq -r .total_count"
-    echo "Query: $cmd" >&2
-
-    local res=$($cmd)
-    echo "Result: $res" >&2
-    echo "" >&2
-
-    echo "$res"
+    curl -s $tokenstr https://api.github.com/search/issues?q=org%3Arobotology+$1 | jq -r .total_count
 }
 
 name=$1
