@@ -21,13 +21,21 @@ function query()
     if [ "$2" != "none" ]; then
         tokenstr="-H \"Authorization: token $2\""
     fi
-    local res="$(curl -s $tokenstr https://api.github.com/search/issues?q=org%3Arobotology+$1 | jq -r .total_count)"
+
+    local cmd="curl -s $tokenstr https://api.github.com/search/issues?q=org%3Arobotology+$1 | jq -r .total_count"
+    echo "Query: $cmd" >&2
+
+    local res=$($cmd)
+    echo "Result: $res" >&2
+    echo "" >&2
+
     echo "$res"
 }
 
 name=$1
 token="none"
 
+echo ""
 if [ $# -ge 2 ]; then
     if [[ $2 =~ ^[0-9a-fA-F]+$ ]]; then
         token=$2
@@ -38,6 +46,7 @@ fi
 if [ "$token" == "none" ]; then
     echo "Computing kudos for \"$name\"..."
 fi
+echo ""
 
 
 q_0=$(query "is%3Aclosed+assignee%3A$name" $token)
