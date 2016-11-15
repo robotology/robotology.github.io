@@ -26,10 +26,11 @@ function query()
 }
 
 name=$1
-token=$2
-if [ -n token ]; then
+if [ $# -ge 2 ]; then
+    token=$2
     echo "Computing kudos for \"$name\" using token \"$token\"..."
 else
+    token=""
     echo "Computing kudos for \"$name\"..."
 fi
 
