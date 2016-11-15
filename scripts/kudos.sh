@@ -11,7 +11,7 @@
 
 if [ $# -eq 0 ]
 then
-    echo "Usage: kudos user-name [token]"
+    echo "Usage: kudos username [token]"
     exit 1
 fi
 
@@ -35,20 +35,21 @@ else
 fi
 
 q_0=$(query "is%3Aclosed+assignee%3A$name" $token)
-sleep 0.2
+sleep 0.5
 q_1=$(query "is%3Aclosed+-assignee%3A$name+author%3A$name" $token)
-sleep 0.2
+sleep 0.5
 q_2=$(query "is%3Aclosed+-assignee%3A$name+-author%3A$name+involves%3A$name" $token)
-sleep 0.2
+sleep 0.5
 q_3=$(query "is%3Aopen+assignee%3A$name" $token)
-sleep 0.2
+sleep 0.5
 q_4=$(query "is%3Aopen+-assignee%3A$name+author%3A$name" $token)
-sleep 0.2
+sleep 0.5
 q_5=$(query "is%3Aopen+-assignee%3A$name+-author%3A$name+involves%3A$name" $token)
+sleep 0.5
 
 for q_i in q_0 q_1 q_2 q_3 q_4 q_5; do
     if [ "${!q_i}" == "null" ]; then
-        echo "Wrong token or API rate limit exceeded (see https://developer.github.com/v3/#rate-limiting)"
+        echo "Wrong username/token or API rate limit exceeded (see https://developer.github.com/v3/#rate-limiting)"
         exit 2
     fi
 done
