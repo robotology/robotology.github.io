@@ -73,7 +73,7 @@ printf "%5d = %5d\n" $q $k
 let "kudos = $kudos + $k"
 
 mult=4
-printf "    author and not merged (rejected, withrawn, etc) (%02d kudos) " $mult
+printf "    author and not merged (rejected, withdrawn, etc) (%02d kudos) " $mult
 # "-is:merged" does not work therefore we use closed - merged
 qx=$q
 q=$(query "$org" "is:pr is:closed author:$name" $token)
