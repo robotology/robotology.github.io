@@ -57,6 +57,7 @@ fi
 if [ "$token" == "none" ]; then
     echo "Computing kudos for \"$name\" on organization \"$org\"..."
 fi
+echo "GitHub might take a while to reply due to their rate limiter, thus just wait even if the process seems stuck."
 echo ""
 
 
