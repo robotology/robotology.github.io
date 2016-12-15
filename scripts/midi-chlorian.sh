@@ -43,19 +43,19 @@ function query()
 org=$1
 name=$2
 token="none"
-kudos=0
+mc=0
 
 
 echo ""
 if [ $# -ge 3 ]; then
     if [[ $3 =~ ^[0-9a-fA-F]+$ ]]; then
         token=$3
-        echo "Computing kudos for \"$name\" on organization \"$org\" using token \"$token\"..."
+        echo "Computing midi-chlorian for \"$name\" on organization \"$org\" using token \"$token\"..."
     fi
 fi
 
 if [ "$token" == "none" ]; then
-    echo "Computing kudos for \"$name\" on organization \"$org\"..."
+    echo "Computing midi-chlorian for \"$name\" on organization \"$org\"..."
 fi
 echo "GitHub might take a while to reply due to their rate limiter, thus just wait even if the process seems stuck."
 echo ""
@@ -67,35 +67,35 @@ echo ""
 echo "Closed PRs:"
 
 mult=16
-printf "    author and merged (%02d kudos)                               " $mult
+printf "    author and merged (%02d midi-chlorian)                                " $mult
 q=$(query "$org" "is:pr is:merged author:$name" $token)
 let "k = $mult * $q"
 printf "%5d = %5d\n" $q $k
-let "kudos = $kudos + $k"
+let "mc = $mc + $k"
 
 mult=4
-printf "    author and not merged (rejected, withdrawn, etc) (%02d kudos) " $mult
+printf "    author and not merged (rejected, withdrawn, etc) (%02d midi-chlorian) " $mult
 # "-is:merged" does not work therefore we use closed - merged
 qx=$q
 q=$(query "$org" "is:pr is:closed author:$name" $token)
 let "q = $q - $qx"
 let "k = $mult * $q"
 printf "%5d = %5d\n" $q $k
-let "kudos = $kudos + $k"
+let "mc = $mc + $k"
 
 mult=8
-printf "    not author and assigned (%02d kudos)                         " $mult
+printf "    not author and assigned (%02d midi-chlorian)                          " $mult
 q=$(query "$org" "is:pr is:closed -author:$name assignee:$name" $token)
 let "k = $mult * $q"
 printf "%5d = %5d\n" $q $k
-let "kudos = $kudos + $k"
+let "mc = $mc + $k"
 
 mult=4
-printf "    involved (%02d kudos)                                        " $mult
+printf "    involved (%02d midi-chlorian)                                         " $mult
 q=$(query "$org" "is:pr is:closed -author:$name -assignee:$name involves:$name" $token)
 let "k = $mult * $q"
 printf "%5d = %5d\n" $q $k
-let "kudos = $kudos + $k"
+let "mc = $mc + $k"
 
 
 
@@ -103,52 +103,52 @@ let "kudos = $kudos + $k"
 echo "Closed issues:"
 
 mult=16
-printf "    assigned (%02d kudos)                                        " $mult
+printf "    assigned (%02d midi-chlorian)                                         " $mult
 q=$(query "$org" "is:issue is:closed assignee:$name" $token)
 let "k = $mult * $q"
 printf "%5d = %5d\n" $q $k
-let "kudos = $kudos + $k"
+let "mc = $mc + $k"
 
 mult=8
-printf "    author and not assigned (%02d kudos)                         " $mult
+printf "    author and not assigned (%02d midi-chlorian)                          " $mult
 q=$(query "$org" "is:issue is:closed -assignee:$name author:$name" $token)
 let "k = $mult * $q"
 printf "%5d = %5d\n" $q $k
-let "kudos = $kudos + $k"
+let "mc = $mc + $k"
 
 mult=4
-printf "    involves and not author and not assigned (%02d kudos)        " $mult
+printf "    involves and not author and not assigned (%02d midi-chlorian)         " $mult
 q=$(query "$org" "is:issue is:closed -assignee:$name -author:$name involves:$name" $token)
 let "k = $mult * $q"
 printf "%5d = %5d\n" $q $k
-let "kudos = $kudos + $k"
+let "mc = $mc + $k"
 
 
 
 echo "Open PRs:"
 
 mult=4
-printf "    author (%02d kudos)                                          " $mult
+printf "    author (%02d midi-chlorian)                                           " $mult
 q=$(query "$org" "is:pr is:open author:$name" $token)
 let "k = $mult * $q"
 printf "%5d = %5d\n" $q $k
-let "kudos = $kudos + $k"
+let "mc = $mc + $k"
 
 
 mult=2
-printf "    not author and assigned (%02d kudos)                         " $mult
+printf "    not author and assigned (%02d midi-chlorian)                          " $mult
 q=$(query "$org" "is:pr is:open -author:$name assignee:$name" $token)
 let "k = $mult * $q"
 printf "%5d = %5d\n" $q $k
-let "kudos = $kudos + $k"
+let "mc = $mc + $k"
 
 
 mult=1
-printf "    involved (%02d kudos)                                        " $mult
+printf "    involved (%02d midi-chlorian)                                         " $mult
 q=$(query "$org" "is:pr is:open -author:$name -assignee:$name involves:$name" $token)
 let "k = $mult * $q"
 printf "%5d = %5d\n" $q $k
-let "kudos = $kudos + $k"
+let "mc = $mc + $k"
 
 
 
@@ -157,33 +157,33 @@ let "kudos = $kudos + $k"
 echo "Open issues:"
 
 mult=2
-printf "    assigned (%02d kudos):                                       " $mult
+printf "    assigned (%02d midi-chlorian):                                        " $mult
 q=$(query "$org" "is:issue is:open assignee:$name" $token)
 let "k = $mult * $q"
 printf "%5d = %5d\n" $q $k
-let "kudos = $kudos + $k"
+let "mc = $mc + $k"
 
 
 mult=1
-printf "    author and not assigned (%02d kudos):                        " $mult
+printf "    author and not assigned (%02d midi-chlorian):                         " $mult
 q=$(query "$org" "is:issue is:open -assignee:$name author:$name" $token)
 let "k = $mult * $q"
 printf "%5d = %5d\n" $q $k
-let "kudos = $kudos + $k"
+let "mc = $mc + $k"
 
 
 mult=1
-printf "    involves and not author and not assigned (%02d kudos)        " $mult
+printf "    involves and not author and not assigned (%02d midi-chlorian)         " $mult
 q=$(query "$org" "is:issue is:open -assignee:$name -author:$name involves:$name" $token)
 let "k = $mult * $q"
 printf "%5d = %5d\n" $q $k
-let "kudos = $kudos + $k"
+let "mc = $mc + $k"
 
 
 
 
 
 
-echo "----------------------------------------------------------------------------"
-
-printf "Total kudos                                                            %5d\n" $kudos
+echo   "-------------------------------------------------------------------------------------"
+printf "Total midi-chlorian                                                             %5d\n" $mc
+echo ""
